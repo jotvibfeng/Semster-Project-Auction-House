@@ -5,7 +5,8 @@ export const API_AUTH = '/auth';
 export const API_REGISTER = '/register';
 export const API_LOGIN = '/login';
 export const API_KEY_URL = '/create-api-key';
-export const API_LISTING = '/auction/listings';
+export const API_LISTING =
+  '/auction/listings?_seller=true&_bids=true&_active=true';
 export const API_SEARCH = '/auction/listings/search';
 export const API_BID_LISTING = '/auction/listings/bids';
 export const API_PROFILE = '/auction/profiles';

@@ -8,9 +8,16 @@ module.exports = {
         'button-color': '#9eabcf',
         'register-button': '#6a7799',
         'hover-login': '#B7C7F3',
+        'listing-button': '#C1BCBB',
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
+      },
+      width: {
+        custom: '50%',
+      },
+      height: {
+        hcustom: '50%',
       },
     },
   },

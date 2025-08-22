@@ -4,7 +4,12 @@
     <link rel="stylesheet" href="css/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <script src="js/ui/menu/menuButton.js" type="module"></script>
+    <script
+      src="js/displayAuctionHouse/userProfileAuctionHouse.js"
+      type="module"
+    ></script>
+    <title>Action House Profile</title>
   </head>
   <body>
     <header
@@ -36,11 +41,6 @@
       >
         <ul class="hidden md:flex space-x-6">
           <li>
-            <a href="#" class="hover:text-hover-login transition-colors"
-              >Home</a
-            >
-          </li>
-          <li>
             <a
               href="createListing.html"
               class="hover:text-hover-login transition-colors"
@@ -48,7 +48,9 @@
             >
           </li>
           <li>
-            <a href="#" class="hover:text-hover-login transition-colors"
+            <a
+              href="listing.html"
+              class="hover:text-hover-login transition-colors"
               >Auctions</a
             >
           </li>
@@ -122,33 +124,12 @@
       </button>
     </header>
     <main>
-      <h1 class="text-2xl font-bold mb-4">User Profile</h1>
-      <div class="bg-white p-4 rounded-lg shadow">
-        <h2 class="text-xl font-semibold mb-2">Personal Information</h2>
-        <p class="mb-1"><strong>Name:</strong> John Doe</p>
-        <p class="mb-1"><strong>Email:</strong> john.doe@example.com</p>
-        <p class="mb-1"><strong>Location:</strong> New York, USA</p>
-      </div>
-      <div class="bg-white p-4 rounded-lg shadow mt-4">
-        <h2 class="text-xl font-semibold mb-2">My Listings</h2>
-        <ul class="list-disc list-inside">
-          <li>
-            <a href="listing.html" class="text-blue-500 hover:underline"
-              >Vintage Chair</a
-            >
-          </li>
-          <li>
-            <a href="listing.html" class="text-blue-500 hover:underline"
-              >Antique Table</a
-            >
-          </li>
-          <li>
-            <a href="listing.html" class="text-blue-500 hover:underline"
-              >Mid-century Lamp</a
-            >
-          </li>
-        </ul>
-      </div>
+      <section>
+        <div id="auctionProfile-user"></div>
+      </section>
+      <section>
+        <div class="personal-listing"></div>
+      </section>
     </main>
   </body>
 </html>

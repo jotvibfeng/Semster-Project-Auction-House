@@ -7,7 +7,7 @@ export function headers(hasBody = false) {
   const token = load('token');
 
   if (token) {
-    headers.append('Aurhorization', `Bearer ${token}`);
+    headers.append('Authorization', `Bearer ${token}`);
   }
 
   if (API_KEY) {

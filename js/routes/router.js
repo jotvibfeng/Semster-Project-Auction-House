@@ -14,7 +14,7 @@ function router() {
     case '/register/':
     case '/register.html':
       onAuth();
-      breake;
+      break;
   }
 }
 

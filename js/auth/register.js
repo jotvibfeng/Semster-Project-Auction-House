@@ -18,12 +18,17 @@ export async function register(name, email, password) {
     return data;
   }
 
+  // Always try to parse the error message
+  let errorMsg = 'Could not register the user';
   try {
-    await response.json();
+    const errorData = await response.json();
+    if (errorData && errorData.errors && errorData.errors[0]?.message) {
+      errorMsg = errorData.errors[0].message;
+    }
   } catch (error) {
-    messageElement.textContent = 'Profile already exists';
-    messageElement.style = 'red';
+    // ignore
   }
-
-  throw new Error('Could not register the user');
+  messageElement.textContent = errorMsg;
+  messageElement.style.color = 'red';
+  throw new Error(errorMsg);
 }
