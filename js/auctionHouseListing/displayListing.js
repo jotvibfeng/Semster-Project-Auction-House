@@ -1,12 +1,11 @@
 export function displayAuctionHouseListing(listings) {
+  console.log('API listing:', listings);
   const listingContainer = document.getElementById('listingContainer');
   listingContainer.innerHTML = '';
-  // Responsive grid: 1 col mobile, 2 tablet, 4 desktop
   listingContainer.className =
     'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8';
 
   listings.forEach((listing) => {
-    // Calculate time left
     const endsAt = new Date(listing.endsAt);
     const now = new Date();
     const diff = endsAt - now;
@@ -17,16 +16,13 @@ export function displayAuctionHouseListing(listings) {
       timeLeft = `${hours}h ${minutes}m left`;
     }
 
-    // Card container (no border)
     const card = document.createElement('div');
-    card.className =
-      'bg-white rounded-lg  overflow-hidden flex flex-col cursor-pointer ';
+    card.className = 'bg-white   overflow-hidden flex flex-col cursor-pointer ';
 
     card.addEventListener('click', () => {
       window.location.href = `/listingDetail.html?id=${listing.id}`;
     });
 
-    // Image wrapper with title overlay
     const imageWrapper = document.createElement('div');
     imageWrapper.className =
       'relative w-full h-[150px] flex items-center justify-center';
@@ -45,7 +41,6 @@ export function displayAuctionHouseListing(listings) {
       img.alt = 'No image found';
     }
 
-    // Title overlay
     const titleOverlay = document.createElement('div');
     titleOverlay.className =
       'absolute inset-0 flex items-center justify-center bg-black bg-opacity-40';
@@ -59,7 +54,7 @@ export function displayAuctionHouseListing(listings) {
 
     // Info section
     const info = document.createElement('div');
-    info.className = 'p-4 flex flex-col gap-2';
+    info.className = ' mt-2 flex flex-col gap-2';
 
     // Seller
     const seller = document.createElement('p');
@@ -75,13 +70,14 @@ export function displayAuctionHouseListing(listings) {
       const now = new Date();
       const diff = new Date(listing.endsAt) - now;
       if (diff > 0) {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const day = Math.floor(diff / (1000 * 24 * 60 * 60));
+        const hours = Math.floor(diff / (10000 * 60 * 60));
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
-        time.textContent = `Time left: ${hours}h ${minutes}m ${seconds}s`;
+        time.textContent = `Time left: ${day}d ${hours}h ${minutes}m ${seconds}s`;
       } else {
         time.textContent = 'Time left: Ended';
-        clearInterval(intervalId); // Stop updating when ended
+        clearInterval(intervalId);
       }
     }
 
@@ -90,25 +86,55 @@ export function displayAuctionHouseListing(listings) {
     // Update every second
     const intervalId = setInterval(updateCountdown, 1000);
 
-    // Bid count
     const bids = document.createElement('p');
     bids.className = 'text-gray-700 text-sm';
     bids.textContent = `Bids: ${listing._count?.bids ?? 0}`;
 
-    const bidButton = document.createElement('button');
-    bidButton.className =
-      'mt-2 bg-listing-button hover:bg-hover-login text-white font-semibold py-2 px-4 rounded transition';
-    bidButton.textContent = 'Place Bid';
-    bidButton.addEventListener('click', (event) => {
-      event.stopPropagation(); // Prevent card click
-      // Add your bid logic here, e.g. open a modal or prompt
-      alert(`Place a bid on "${listing.title}" (ID: ${listing.id})`);
+    // Bid form
+    const bidForm = document.createElement('form');
+    bidForm.className = 'flex gap-2 mt-2 w-full';
+
+    bidForm.addEventListener('click', (event) => {
+      event.stopPropagation();
     });
+
+    const bidInput = document.createElement('input');
+    bidInput.type = 'number';
+    bidInput.min = '1';
+    bidInput.placeholder = 'Your bid';
+    bidInput.required = true;
+    bidInput.className = 'flex-1 border rounded px-2 py-1 text-sm';
+
+    const bidButton = document.createElement('button');
+    bidButton.type = 'submit';
+    bidButton.className =
+      'bg-listing-button hover:bg-hover-login text-white font-semibold py-2 px-4 rounded w-32 transition';
+    bidButton.textContent = 'Place Bid';
+
+    bidForm.appendChild(bidInput);
+    bidForm.appendChild(bidButton);
+
+    bidForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const bidValue = bidInput.value;
+      if (!bidValue || isNaN(bidValue) || Number(bidValue) <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+      // Replace this alert with your API call to place a bid
+      alert(
+        `Bid of ${bidValue} placed on "${listing.title}" (ID: ${listing.id})`
+      );
+      bidInput.value = '';
+    });
+
+    bidForm.appendChild(bidInput);
+    bidForm.appendChild(bidButton);
 
     info.appendChild(seller);
     info.appendChild(time);
     info.appendChild(bids);
-    info.appendChild(bidButton);
+    info.appendChild(bidForm);
     card.appendChild(imageWrapper);
     card.appendChild(info);
 

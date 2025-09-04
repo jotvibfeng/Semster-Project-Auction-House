@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="css/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="js/ui/menu/menuButton.js" type="module"></script>
     <script
       type="module"
@@ -15,7 +19,6 @@
     <header
       class="bg-background-gray text-white font-roboto px-4 py-4 flex items-center justify-between"
     >
-      <!-- SVG logo on the left -->
       <div>
         <svg
           class="w-20 h-10"
@@ -41,13 +44,8 @@
       >
         <ul class="hidden md:flex space-x-6">
           <li>
-            <a href="#" class="hover:text-hover-login transition-colors"
-              >Home</a
-            >
-          </li>
-          <li>
             <a
-              href="createListing.html"
+              href="createListning.html"
               class="hover:text-hover-login transition-colors"
               >Create Listing</a
             >
@@ -55,6 +53,13 @@
           <li>
             <a href="#" class="hover:text-hover-login transition-colors"
               >Auctions</a
+            >
+          </li>
+          <li>
+            <a
+              href="about.html"
+              class="hover:text-hover-login transition-colors"
+              >About</a
             >
           </li>
           <li>
@@ -106,9 +111,9 @@
             </div>
           </form>
           <ul class="flex flex-col space-y-4 mt-4">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Create Listing</a></li>
-            <li><a href="#">Auctions</a></li>
+            <li><a href="createListning.html">Create Listing</a></li>
+            <li><a href="listing.html">Auctions</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="profile.html">Profile</a></li>
             <li><a href="index.html">Logout</a></li>
           </ul>
@@ -138,5 +143,54 @@
         </div>
       </div>
     </main>
+    <footer
+      class="bg-background-gray text-white font-roboto w-full fixed bottom-0 left-0 z-50"
+    >
+      <div
+        class="flex flex-row items-start justify-between px-2 py-2 md:px-4 md:py-4 w-full"
+      >
+        <!-- Contact Info (left) -->
+        <div class="flex flex-col items-start gap-1 md:gap-2">
+          <span class="font-semibold text-base md:text-lg">Contact Us</span>
+          <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+            <i class="fa-regular fa-envelope fa-lg md:fa-2x"></i>
+            <span class="select-all">Auction.house@online.com</span>
+          </div>
+          <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+            <i class="fa-solid fa-phone fa-lg md:fa-2x"></i>
+            <span class="select-all">+47 514 91 637</span>
+          </div>
+        </div>
+        <!-- Social Media (right) -->
+        <div class="flex flex-col items-end gap-1 md:gap-2">
+          <span class="font-semibold text-base md:text-lg">Follow Us</span>
+          <div class="flex items-center gap-3 md:gap-6">
+            <a href="https://youtube.com" target="_blank" aria-label="YouTube">
+              <i
+                class="fab fa-youtube fa-lg md:fa-2x hover:text-red-500 transition"
+              ></i>
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Instagram"
+            >
+              <i
+                class="fab fa-instagram fa-lg md:fa-2x hover:text-pink-400 transition"
+              ></i>
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              aria-label="LinkedIn"
+            >
+              <i
+                class="fab fa-linkedin fa-lg md:fa-2x hover:text-blue-400 transition"
+              ></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
