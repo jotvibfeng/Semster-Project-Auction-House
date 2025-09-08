@@ -1,5 +1,5 @@
-import { BASE_URL, API_LISTING } from '../api/constant.js';
-import { headers } from '../api/headers.js';
+import { BASE_URL, API_LISTING } from "../api/constant.js";
+import { headers } from "../api/headers.js";
 
 async function fetchDetailListing(listingId) {
   const listingUrl = `${BASE_URL + API_LISTING}`; // <-- Remove /${listingId}
@@ -7,31 +7,31 @@ async function fetchDetailListing(listingId) {
   try {
     const response = await fetch(listingUrl, {
       headers: headers(true),
-      method: 'GET',
+      method: "GET",
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch listing detail');
+      throw new Error("Failed to fetch listing detail");
     }
 
     const result = await response.json();
     // Find the listing in the array
     const listing = result.data.find((item) => item.id === listingId);
-    console.log('Full API result:', result);
-    console.log('listing:', listing);
+    console.log("Full API result:", result);
+    console.log("listing:", listing);
     if (!listing) {
-      throw new Error('Listing not found');
+      throw new Error("Listing not found");
     }
     displayListingDetail(listing);
   } catch (error) {
-    console.error('Error fetching listing detail:', error);
+    console.error("Error fetching listing detail:", error);
     displayError(error.message);
   }
 }
 
 function displayError(message) {
   const listingDetailContainer = document.getElementById(
-    'listingDetailContainer'
+    "listingDetailContainer"
   );
   if (!listingDetailContainer) return;
   listingDetailContainer.innerHTML = `
@@ -44,26 +44,26 @@ function displayError(message) {
 
 function displayListingDetail(listing) {
   const listingDetailContainer = document.getElementById(
-    'listingDetailContainer'
+    "listingDetailContainer"
   );
   if (!listingDetailContainer) return;
 
   // Prepare fields with fallbacks
-  const title = listing.title || 'No title available';
-  const description = listing.description || 'No description available';
-  const seller = listing.seller?.name || 'Unknown seller';
+  const title = listing.title || "No title available";
+  const description = listing.description || "No description available";
+  const seller = listing.seller?.name || "Unknown seller";
   const bids = listing._count?.bids ?? 0;
 
   // Image logic
-  let imageUrl = '';
-  let imageAlt = 'Listing image';
+  let imageUrl = "";
+  let imageAlt = "Listing image";
   if (
     Array.isArray(listing.media) &&
     listing.media.length > 0 &&
     listing.media[0].url
   ) {
     imageUrl = listing.media[0].url;
-    imageAlt = listing.media[0].alt || 'Listing image';
+    imageAlt = listing.media[0].alt || "Listing image";
   }
 
   // Time left logic
@@ -78,7 +78,7 @@ function displayListingDetail(listing) {
       const seconds = Math.floor((diff / 1000) % 60);
       return `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
-    return 'Ended';
+    return "Ended";
   }
 
   listingDetailContainer.innerHTML = `
@@ -100,40 +100,38 @@ function displayListingDetail(listing) {
     </div>
   `;
 
-  // Countdown update
-  const timeLeftElem = document.getElementById('timeLeft');
+  const timeLeftElem = document.getElementById("timeLeft");
   let intervalId = setInterval(() => {
     if (timeLeftElem) {
       const left = getTimeLeft();
       timeLeftElem.textContent = `Time left: ${left}`;
-      if (left === 'Ended') clearInterval(intervalId);
+      if (left === "Ended") clearInterval(intervalId);
     }
   }, 1000);
 
-  // Bid form handler
-  const bidForm = document.getElementById('bidForm');
+  const bidForm = document.getElementById("bidForm");
   if (bidForm) {
-    bidForm.addEventListener('submit', (event) => {
+    bidForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const bidInput = bidForm.querySelector("input[type='number']");
       const bidValue = bidInput.value;
       if (!bidValue || isNaN(bidValue) || Number(bidValue) <= 0) {
-        alert('Please enter a valid amount.');
+        alert("Please enter a valid amount.");
         return;
       }
       // Replace this alert with your API call to place a bid
       alert(`Bid of ${bidValue} placed on "${title}" (ID: ${listing.id})`);
-      bidInput.value = '';
+      bidInput.value = "";
     });
   }
 }
 
 // Get the listing ID from the URL query parameters and fetch details
 const urlParams = new URLSearchParams(window.location.search);
-const listingId = urlParams.get('id');
+const listingId = urlParams.get("id");
 
 if (listingId) {
   fetchDetailListing(listingId);
 } else {
-  displayError('No listing ID found in URL');
+  displayError("No listing ID found in URL");
 }
