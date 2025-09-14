@@ -205,5 +205,12 @@
   },
   "directories": {
     "test": "tests"
+  },
+  "overrides": {
+    "fsevents": {
+      "os": [
+        "darwin"
+      ]
+    }
   }
 }
