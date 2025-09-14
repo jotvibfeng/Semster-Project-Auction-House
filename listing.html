@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <link rel="stylesheet" href="css/style.css" />
@@ -8,11 +8,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script type="module" src="js/ui/menu/createListing.js"></script>
     <script src="js/ui/menu/menuButton.js" type="module"></script>
-    <script
-      type="module"
-      src="js/displayAuctionHouse/lsitingItemAuctionHouse.js"
-    ></script>
+    <script type="module" src="js/listing.js"></script>
     <title>listing</title>
   </head>
   <body>
@@ -38,20 +36,15 @@
           />
         </svg>
       </div>
-      <!-- Navigation centered, hamburger right -->
+
       <nav
         class="flex-1 flex justify-center items-center relative hover:bg-background-gray"
       >
         <ul class="hidden md:flex space-x-6">
           <li>
             <a
-              href="createListning.html"
+              href="listing.html"
               class="hover:text-hover-login transition-colors"
-              >Create Listing</a
-            >
-          </li>
-          <li>
-            <a href="#" class="hover:text-hover-login transition-colors"
               >Auctions</a
             >
           </li>
@@ -77,14 +70,51 @@
             >
           </li>
         </ul>
+        <!-- Desktop search and filter -->
+        <div class="hidden md:flex items-center space-x-4 ml-6">
+          <div class="flex flex-col sm:flex-row justify-between py-3 px-6">
+            <form action="" class="w-full sm:max-w-md">
+              <fieldset>
+                <div
+                  class="relative flex items-center text-gray-400 focus-within:text-black"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-5 h-5 absolute ml-3 pointer-events-none"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    name="search"
+                    id="searchInput"
+                    placeholder="Search post"
+                    autocomplete="off"
+                    aria-label="Search post"
+                    class="w-full pr-3 pl-10 py-2 font-semibold placeholder-gray-500 text-black rounded-2xl border-none ring-2 ring-gray-300 focus:ring-gray-500 focus:ring-2"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
         <!-- Mobile menu (hidden by default) -->
         <div
           id="mobile-menu"
           class="md:hidden hidden bg-background-gray text-white font-roboto px-4 py-3 fixed top-14 right-0 w-64 z-50"
         >
+          <!-- Mobile search and filter -->
           <form action="" class="w-full px-4 py-2">
             <div
-              class="relative flex items-center text-gray-400 focus-within:text-black"
+              class="relative flex items-center text-gray-400 focus-within:text-black mb-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,11 +139,20 @@
                 class="w-full pr-3 pl-10 py-2 font-semibold placeholder-gray-500 text-black rounded-2xl border-none ring-2 ring-gray-300 focus:ring-gray-500 focus:ring-2"
               />
             </div>
+            <!-- Filter dropdown -->
+            <select
+              id="mobile-filter"
+              class="rounded-2xl border-none ring-2 ring-gray-300 focus:ring-gray-500 focus:ring-2 py-2 px-3 font-semibold text-black w-full"
+            >
+              <option value="">All</option>
+              <option value="ending-soon">Ending Soon</option>
+              <option value="newest">Newest</option>
+              <option value="highest-bid">Highest Bid</option>
+            </select>
           </form>
           <ul class="flex flex-col space-y-4 mt-4">
             <li><a href="createListning.html">Create Listing</a></li>
             <li><a href="listing.html">Auctions</a></li>
-            <li><a href="about.html">About</a></li>
             <li><a href="profile.html">Profile</a></li>
             <li><a href="index.html">Logout</a></li>
           </ul>
@@ -133,14 +172,91 @@
     </header>
 
     <main>
-      <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">Listing</h1>
-        <div class="container mx-auto px-4 py-8">
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-            id="listingContainer"
-          ></div>
+      <div class="flex items-center justify-between mb-6 px-4 mt-10">
+        <h1 class="text-3xl font-bold">Listing</h1>
+        <button
+          id="openCreateListing"
+          class="bg-background-gray hover:bg-hover-login text-white font-semibold py-2 px-8 rounded shadow transition"
+          type="button"
+        >
+          + Create Listing
+        </button>
+      </div>
+
+      <div
+        id="createListingModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+      >
+        <div
+          class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md relative"
+        >
+          <button
+            id="closeCreateListing"
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
+            type="button"
+          >
+            &times;
+          </button>
+          <h2 class="text-xl font-bold mb-4">Create New Listing</h2>
+          <form id="createListingForm" class="flex flex-col gap-4">
+            <input
+              type="text"
+              id="listingTitle"
+              name="title"
+              placeholder="Title"
+              required
+              class="border rounded px-3 py-2"
+            />
+            <textarea
+              id="listingDescription"
+              name="description"
+              placeholder="Description"
+              required
+              class="border rounded px-3 py-2"
+            ></textarea>
+            <input
+              type="number"
+              id="startingBid"
+              name="startingBid"
+              placeholder="Starting Bid"
+              min="0"
+              required
+              class="border rounded px-3 py-2"
+            />
+            <input
+              type="datetime-local"
+              id="endsAt"
+              name="endsAt"
+              required
+              class="border rounded px-3 py-2"
+            />
+            <input
+              type="url"
+              id="listingImage"
+              name="media"
+              placeholder="Image/* (optional)"
+              class="border rounded px-3 py-2"
+            />
+            <button
+              type="submit"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+            >
+              Create
+            </button>
+          </form>
+          <div id="createListingStatus" class="mt-2 text-sm"></div>
         </div>
+      </div>
+
+      <div class="container mx-auto px-4 py-8">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          id="listingContainer"
+        ></div>
+        <div
+          id="notification"
+          class="fixed top-4 right-4 z-50 hidden px-4 py-2 rounded bg-green-600 text-white shadow"
+        ></div>
       </div>
     </main>
     <footer
@@ -149,7 +265,6 @@
       <div
         class="flex flex-row items-start justify-between px-2 py-2 md:px-4 md:py-4 w-full"
       >
-        <!-- Contact Info (left) -->
         <div class="flex flex-col items-start gap-1 md:gap-2">
           <span class="font-semibold text-base md:text-lg">Contact Us</span>
           <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
@@ -161,7 +276,6 @@
             <span class="select-all">+47 514 91 637</span>
           </div>
         </div>
-        <!-- Social Media (right) -->
         <div class="flex flex-col items-end gap-1 md:gap-2">
           <span class="font-semibold text-base md:text-lg">Follow Us</span>
           <div class="flex items-center gap-3 md:gap-6">
