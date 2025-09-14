@@ -1,7 +1,10 @@
 import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config.js";
 
 export default defineConfig({
   test: {
-    exclude: ["**/node_modules/**", "**/tests/**"],
+    globals: true,
+    environment: "jsdom",
+    exclude: [...configDefaults.exclude],
   },
 });

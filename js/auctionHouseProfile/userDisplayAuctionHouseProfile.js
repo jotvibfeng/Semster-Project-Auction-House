@@ -1,4 +1,4 @@
-import { fetchSaveProfilePicture } from "./fetchAuctionHouseProfile.js";
+import { editUserProfile } from "./editProfileAuctionHouse.js";
 
 export function userDisplayAuctionHouseProfile(profile) {
   const userProfileDiv = document.getElementById("auctionProfile-user");
@@ -8,25 +8,18 @@ export function userDisplayAuctionHouseProfile(profile) {
   }
   userProfileDiv.innerHTML = createHTML(profile);
 
-  // Add event listeners
-  const fileInput = document.getElementById("profile-picture-input");
-  if (fileInput) {
-    fileInput.addEventListener("change", handleProfilePictureChange);
-  }
-
   const saveBtn = document.getElementById("save-profile-picture");
   if (saveBtn) {
-    saveBtn.addEventListener("click", (event) => {
+    saveBtn.addEventListener("click", async (event) => {
       event.preventDefault();
-      fetchSaveProfilePicture();
+      await fetchSaveProfilePicture();
     });
   }
 
-  // Clicking the plus icon triggers file input
   const plusBtn = document.getElementById("add-picture-btn");
   if (plusBtn) {
-    plusBtn.addEventListener("click", () => {
-      fileInput.click();
+    plusBtn.addEventListener("click", async () => {
+      await fetchSaveProfilePicture();
     });
   }
 }
@@ -61,7 +54,6 @@ function createHTML(profile) {
             title="Add profile picture" aria-label="Add profile picture">
             <i class="fa-solid fa-plus text-grey text-3xl"></i>
           </button>
-          <input id="profile-picture-input" type="file" accept="image/*" class="hidden" />
         </div>
         <div>
           <h2 class="font-roboto mb-4"> Credit: ${
@@ -112,8 +104,8 @@ function createHTML(profile) {
                           w.title || "Untitled"
                         }</span>
                         <span class="text-sm text-gray-500">Won: ${
-                          w.endedAt
-                            ? new Date(w.endedAt).toLocaleDateString()
+                          w.endsAt
+                            ? new Date(w.endsAt).toLocaleDateString()
                             : ""
                         }</span>
                       </li>`
@@ -128,19 +120,21 @@ function createHTML(profile) {
   `;
 }
 
-export function handleProfilePictureChange(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+export async function fetchSaveProfilePicture() {
+  const url = prompt(
+    "Paste a public image URL for your profile picture (the API requires a public URL):"
+  );
+  if (!url) {
+    alert("No URL provided.");
+    return;
+  }
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const preview = document.getElementById("profile-picture-preview");
-    if (preview) {
-      preview.src = e.target.result;
-    } else {
-      const container = document.getElementById("profile-picture-container");
-      container.innerHTML = `<img id="profile-picture-preview" src="${e.target.result}" class="w-full h-full object-cover" />`;
-    }
-  };
-  reader.readAsDataURL(file);
+  try {
+    await editUserProfile({
+      avatar: { url, alt: "Profile picture" },
+    });
+    alert("Profile picture updated!");
+  } catch (error) {
+    alert(error.message || "Failed to update profile picture.");
+  }
 }

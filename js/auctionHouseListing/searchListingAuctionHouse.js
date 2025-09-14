@@ -6,7 +6,6 @@ import { fetchAuctionHouseListing } from "./fetchAuctionHouseListing.js"; // Mak
 export async function searchListing() {
   const searchTerm = document.getElementById("searchInput").value.trim();
 
-  // If search is empty, show all listings and return early
   if (!searchTerm) {
     fetchAuctionHouseListing();
     return;

@@ -14,6 +14,10 @@ import process from "process";
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
+
+// Load environment variables from .env file
+require("dotenv").config();
+
 export default defineConfig({
   testDir: "./tests",
   /* Run tests in files in parallel */

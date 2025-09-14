@@ -1,3 +1,5 @@
+import { deleteListing } from "./deleteListing.js";
+
 export function displayAuctionHouseListing(listings) {
   console.log("API listing:", listings);
   const listingContainer = document.getElementById("listingContainer");
@@ -7,7 +9,7 @@ export function displayAuctionHouseListing(listings) {
 
   listings.forEach((listing) => {
     const card = document.createElement("div");
-    card.className = "bg-white   overflow-hidden flex flex-col cursor-pointer ";
+    card.className = "bg-white overflow-hidden flex flex-col cursor-pointer ";
 
     card.addEventListener("click", () => {
       window.location.href = `/listingDetail.html?id=${listing.id}`;
@@ -42,16 +44,13 @@ export function displayAuctionHouseListing(listings) {
     imageWrapper.appendChild(img);
     imageWrapper.appendChild(titleOverlay);
 
-    // Info section
     const info = document.createElement("div");
-    info.className = " mt-2 flex flex-col gap-2";
+    info.className = "mt-2 flex flex-col gap-2";
 
-    // Seller
     const seller = document.createElement("p");
     seller.className = "text-gray-700 text-sm";
     seller.textContent = `Seller: ${listing.seller?.name || "Unknown"}`;
 
-    // Time left
     const time = document.createElement("p");
     time.className = "text-gray-500 text-xs";
     let intervalId;
@@ -81,7 +80,14 @@ export function displayAuctionHouseListing(listings) {
       (Array.isArray(listing.bids) ? listing.bids.length : 0)
     }`;
 
-    // Bid form
+    let highestBid = 0;
+    if (Array.isArray(listing.bids) && listing.bids.length > 0) {
+      highestBid = Math.max(...listing.bids.map((b) => b.amount));
+    }
+    const highestBidElement = document.createElement("p");
+    highestBidElement.className = "text-xs text-gray-700";
+    highestBidElement.textContent = `Highest bid: ${highestBid}`;
+
     const bidForm = document.createElement("form");
     bidForm.className = "bid-form flex gap-2 mt-2 w-full";
     bidForm.setAttribute("data-listing-id", listing.id);
@@ -92,7 +98,7 @@ export function displayAuctionHouseListing(listings) {
 
     const bidInput = document.createElement("input");
     bidInput.type = "number";
-    bidInput.name = "amount"; // <-- important for the event listener to find it
+    bidInput.name = "amount";
     bidInput.min = "1";
     bidInput.placeholder = "Your bid";
     bidInput.required = true;
@@ -104,27 +110,63 @@ export function displayAuctionHouseListing(listings) {
       "bg-listing-button hover:bg-hover-login text-white font-semibold py-2 px-4 rounded w-32 transition";
     bidButton.textContent = "Place Bid";
 
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className =
-      "bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded w-32 transition";
-    deleteButton.textContent = "Delete Post";
+    bidForm.appendChild(bidInput);
+    bidForm.appendChild(bidButton);
 
-    // Only show the button if the current user is the seller
     const currentUser = localStorage.getItem("profile")
       ? JSON.parse(localStorage.getItem("profile")).name
       : null;
-    if (listing.seller?.name === currentUser) {
-      info.appendChild(deleteButton);
-    }
 
-    bidForm.appendChild(bidInput);
-    bidForm.appendChild(bidButton);
+    if (listing.seller?.name === currentUser) {
+      const buttonContainer = document.createElement("div");
+      buttonContainer.classList.add("flex", "gap-4");
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.classList.add(
+        "bg-red-600",
+        "text-white",
+        "px-6",
+        "py-2",
+        "rounded-lg",
+        "hover:bg-red-700",
+        "transition"
+      );
+      deleteButton.textContent = "Delete";
+      deleteButton.onclick = (event) => {
+        event.stopPropagation();
+        if (confirm("Are you sure you want to delete this listing?")) {
+          deleteListing(listing.id, card);
+        }
+      };
+
+      const updateButton = document.createElement("button");
+      updateButton.type = "button";
+      updateButton.classList.add(
+        "bg-teal-500",
+        "text-white",
+        "px-6",
+        "py-2",
+        "rounded-lg",
+        "hover:bg-teal-600",
+        "transition"
+      );
+      updateButton.textContent = "Update";
+      updateButton.onclick = (event) => {
+        event.stopPropagation();
+      };
+
+      buttonContainer.appendChild(deleteButton);
+      buttonContainer.appendChild(updateButton);
+      info.appendChild(buttonContainer);
+    }
 
     info.appendChild(seller);
     info.appendChild(time);
     info.appendChild(bids);
+    info.appendChild(highestBidElement);
     info.appendChild(bidForm);
+
     card.appendChild(imageWrapper);
     card.appendChild(info);
 

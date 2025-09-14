@@ -82,7 +82,7 @@ function displayListingDetail(listing) {
   }
 
   listingDetailContainer.innerHTML = `
-    <div class="border rounded-lg p-6 mb-4 bg-white shadow-md mx-auto max-w-xl text-center">
+    <div class=" p-6 mb-4 bg-white  mx-auto max-w-xl text-center">
       <img src="${imageUrl}" alt="${imageAlt}" class="object-cover rounded-lg w-[400px] h-[200px] mx-auto mb-4" />
       <h2 class="text-2xl font-bold mb-2">${title}</h2>
       <p class="text-gray-700 mb-4">${description}</p>
@@ -119,14 +119,13 @@ function displayListingDetail(listing) {
         alert("Please enter a valid amount.");
         return;
       }
-      // Replace this alert with your API call to place a bid
+
       alert(`Bid of ${bidValue} placed on "${title}" (ID: ${listing.id})`);
       bidInput.value = "";
     });
   }
 }
 
-// Get the listing ID from the URL query parameters and fetch details
 const urlParams = new URLSearchParams(window.location.search);
 const listingId = urlParams.get("id");
 
