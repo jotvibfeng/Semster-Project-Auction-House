@@ -194,13 +194,6 @@
     "yaml": "^2.8.1",
     "yocto-queue": "^0.1.0"
   },
-  "overrides": {
-    "fsevents": {
-      "os": [
-        "darwin"
-      ]
-    }
-  },
   "lint-staged": {
     "*.js": [
       "prettier --write",
