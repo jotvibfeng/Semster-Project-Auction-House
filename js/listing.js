@@ -43,7 +43,14 @@ document.getElementById("createListingForm").onsubmit = async function (e) {
   }
 };
 
-document.getElementById("searchInput").addEventListener("input", searchListing);
+const searchInput = document.getElementById("searchInput");
+const searchForm = document.getElementById("listing-search-form");
+
+searchInput.addEventListener("input", searchListing);
+searchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  searchListing();
+});
 
 window.deleteListing = deleteListing;
 
